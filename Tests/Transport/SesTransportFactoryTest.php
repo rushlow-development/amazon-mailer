@@ -103,48 +103,8 @@ class SesTransportFactoryTest extends TransportFactoryTestCase
         ];
 
         yield [
-            new Dsn('ses', 'default', self::USER, self::PASSWORD),
-            new SesHttpAsyncAwsTransport(new SesClient(Configuration::create(['accessKeyId' => self::USER, 'accessKeySecret' => self::PASSWORD, 'region' => 'eu-west-1']), null, $client, $logger), $dispatcher, $logger),
-        ];
-
-        yield [
-            new Dsn('ses+https', 'example.com', self::USER, self::PASSWORD, 8080),
-            new SesHttpAsyncAwsTransport(new SesClient(Configuration::create(['accessKeyId' => self::USER, 'accessKeySecret' => self::PASSWORD, 'region' => 'eu-west-1', 'endpoint' => 'https://example.com:8080']), null, $client, $logger), $dispatcher, $logger),
-        ];
-
-        yield [
-            new Dsn('ses+https', 'default', self::USER, self::PASSWORD, null, ['region' => 'eu-west-2']),
-            new SesHttpAsyncAwsTransport(new SesClient(Configuration::create(['accessKeyId' => self::USER, 'accessKeySecret' => self::PASSWORD, 'region' => 'eu-west-2']), null, $client, $logger), $dispatcher, $logger),
-        ];
-
-        yield [
-            new Dsn('ses+https', 'default', self::USER, self::PASSWORD, null, ['session_token' => 'se$sion']),
-            new SesHttpAsyncAwsTransport(new SesClient(Configuration::create(['accessKeyId' => self::USER, 'accessKeySecret' => self::PASSWORD, 'region' => 'eu-west-1', 'sessionToken' => 'se$sion']), null, $client, $logger), $dispatcher, $logger),
-        ];
-
-        yield [
-            new Dsn('ses', 'default', self::USER, self::PASSWORD, null, ['session_token' => 'se$sion']),
-            new SesHttpAsyncAwsTransport(new SesClient(Configuration::create(['accessKeyId' => self::USER, 'accessKeySecret' => self::PASSWORD, 'region' => 'eu-west-1', 'sessionToken' => 'se$sion']), null, $client, $logger), $dispatcher, $logger),
-        ];
-
-        yield [
-            new Dsn('ses+https', 'example.com', self::USER, self::PASSWORD, 8080, ['session_token' => 'se$sion']),
-            new SesHttpAsyncAwsTransport(new SesClient(Configuration::create(['accessKeyId' => self::USER, 'accessKeySecret' => self::PASSWORD, 'region' => 'eu-west-1', 'endpoint' => 'https://example.com:8080', 'sessionToken' => 'se$sion']), null, $client, $logger), $dispatcher, $logger),
-        ];
-
-        yield [
-            new Dsn('ses+https', 'default', self::USER, self::PASSWORD, null, ['region' => 'eu-west-2', 'session_token' => 'se$sion']),
-            new SesHttpAsyncAwsTransport(new SesClient(Configuration::create(['accessKeyId' => self::USER, 'accessKeySecret' => self::PASSWORD, 'region' => 'eu-west-2', 'sessionToken' => 'se$sion']), null, $client, $logger), $dispatcher, $logger),
-        ];
-
-        yield [
-            new Dsn('ses+smtp', 'default', self::USER, self::PASSWORD),
-            new SesSmtpTransport(self::USER, self::PASSWORD, null, $dispatcher, $logger),
-        ];
-
-        yield [
-            new Dsn('ses+smtp', 'default', self::USER, self::PASSWORD, null, ['region' => 'eu-west-1']),
-            new SesSmtpTransport(self::USER, self::PASSWORD, 'eu-west-1', $dispatcher, $logger),
+            new Dsn('ses+smtp', 'custom.vpc.endpoint', self::USER, self::PASSWORD, null, ['region' => 'eu-west-1']),
+            new SesSmtpTransport(self::USER, self::PASSWORD, 'eu-west-1', $dispatcher, $logger, 'custom.vpc.endpoint'),
         ];
 
         yield [
@@ -155,6 +115,11 @@ class SesTransportFactoryTest extends TransportFactoryTestCase
         yield [
             new Dsn('ses+smtps', 'default', self::USER, self::PASSWORD, null, ['region' => 'eu-west-1', 'ping_threshold' => '10']),
             (new SesSmtpTransport(self::USER, self::PASSWORD, 'eu-west-1', $dispatcher, $logger))->setPingThreshold(10),
+        ];
+
+        yield [
+            new Dsn('ses+smtps', 'custom.vpc.endpoint', self::USER, self::PASSWORD, null, ['region' => 'eu-west-1']),
+            new SesSmtpTransport(self::USER, self::PASSWORD, 'eu-west-1', $dispatcher, $logger, 'custom.vpc.endpoint'),
         ];
     }
 
